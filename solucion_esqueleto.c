@@ -471,46 +471,82 @@ int inicializar() {
 void correrTests() {
     // strDuplicate 1. String vacio, 2. String de 1 caracter, 3. String con distintos caracteres
     char* dup1 = strDuplicate("");
-    if (dup1 != NULL && dup1[0] == '\0') printf("[OK] strDuplicate: string vacio\n");
-    else printf("[FALLO] strDuplicate: string vacio\n");
+    if (dup1 != NULL && dup1[0] == '\0') {
+        printf("[OK] strDuplicate: string vacio\n");
+    }
+    else {
+        printf("[FALLO] strDuplicate: string vacio\n");
+    }
     free(dup1);
 
     char* dup2 = strDuplicate("a");
-    if (dup2 != NULL && dup2[0] == 'a' && dup2[1] == '\0') printf("[OK] strDuplicate: un caracter\n");
-    else printf("[FALLO] strDuplicate: un caracter\n");
+    if (dup2 != NULL && dup2[0] == 'a' && dup2[1] == '\0') {
+        printf("[OK] strDuplicate: un caracter\n");
+    }
+    else {
+        printf("[FALLO] strDuplicate: un caracter\n");
+    }
     free(dup2);
 
     char* dup3 = strDuplicate("Hola 123!");
-    if (dup3 != NULL && strCompare(dup3, "Hola 123!") == 0) printf("[OK] strDuplicate: distintos caracteres\n");
-    else printf("[FALLO] strDuplicate: distintos caracteres\n");
+    if (dup3 != NULL && strCompare(dup3, "Hola 123!") == 0) {
+        printf("[OK] strDuplicate: distintos caracteres\n");
+    }
+    else {
+        printf("[FALLO] strDuplicate: distintos caracteres\n");
+    }
     free(dup3);
 
     //strCompare 1. 2 strings vacios o nulos, 2. 2 strings de un solo caracter, 3. 2 strings diferentes, en ambos ordenes
-    if (strCompare("", "") == 0) printf("[OK] strCompare: dos vacios\n");
-    else printf("[FALLO] strCompare: dos vacios\n");
+    if (strCompare("", "") == 0) {
+        printf("[OK] strCompare: dos vacios\n");
+    }
+    else {
+        printf("[FALLO] strCompare: dos vacios\n");
+    }
 
-    if (strCompare("x", "x") == 0) printf("[OK] strCompare: un caracter igual\n");
-    else printf("[FALLO] strCompare: un caracter igual\n");
+    if (strCompare("x", "x") == 0) {
+        printf("[OK] strCompare: un caracter igual\n");
+    }
+    else {
+        printf("[FALLO] strCompare: un caracter igual\n");
+    }
 
-    if (strCompare("a", "b") == 1) printf("[OK] strCompare: a vs b\n");
-    else printf("[FALLO] strCompare: a vs b\n");
+    if (strCompare("a", "b") == 1) {
+        printf("[OK] strCompare: a vs b\n");
+    }
+    else {
+        printf("[FALLO] strCompare: a vs b\n");
+    }
 
-    if (strCompare("b", "a") == -1) printf("[OK] strCompare: b vs a\n");
-    else printf("[FALLO] strCompare: b vs a\n");
+    if (strCompare("b", "a") == -1) {
+        printf("[OK] strCompare: b vs a\n");
+    }
+    else {
+        printf("[FALLO] strCompare: b vs a\n");
+    }
 
     //strConcatenate 1. String vacio y string de 3 caracteres, 2. Dos strings de 5 caracteres
     char* conc1a = strDuplicate("");
     char* conc1b = strDuplicate("abc");
     char* res1 = strConcatenate(conc1a, conc1b);
-    if (res1 != NULL && strCompare(res1, "abc") == 0) printf("[OK] strConcatenate: vacio + abc\n");
-    else printf("[FALLO] strConcatenate: vacio + abc\n");
+    if (res1 != NULL && strCompare(res1, "abc") == 0) {
+        printf("[OK] strConcatenate: vacio + abc\n");
+    }
+    else {
+        printf("[FALLO] strConcatenate: vacio + abc\n");
+    }
     free(res1);
 
     char* conc2a = strDuplicate("hola!");
     char* conc2b = strDuplicate("mundo");
     char* res2 = strConcatenate(conc2a, conc2b);
-    if (res2 != NULL && strCompare(res2, "hola!mundo") == 0) printf("[OK] strConcatenate: hola! + mundo\n");
-    else printf("[FALLO] strConcatenate: hola! + mundo\n");
+    if (res2 != NULL && strCompare(res2, "hola!mundo") == 0) {
+        printf("[OK] strConcatenate: hola! + mundo\n");
+    }
+    else {
+        printf("[FALLO] strConcatenate: hola! + mundo\n");
+    }
     free(res2);
 
 //Tablero: colas (FIFO)
