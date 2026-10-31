@@ -87,7 +87,7 @@ char* strDuplicate(char* src) {
     char* copiaNueva = (char*)malloc((len+1) * sizeof(char));
     if (copiaNueva == NULL) {
         return NULL;
-        // Pido memoria del largo de src +1 por el caracter nulo y si no hay memoria devuelve NULL.
+        // Pido memoria del largo de src +1 por el caracter nulo y si no hay memoria devuelve NULL. Pido malloc porque el string nuevo debe seguir existiendo luego de que la funcion termine.
     } 
     for(int i=0; i<=len; i++) {
         copiaNueva[i] = src[i];
@@ -131,7 +131,7 @@ char* strConcatenate(char* src1, char* src2) {
         }
         free(src1);
         free(src2);
-        return copiaConcatenada; // Se liberan ambas memorias de los strings y se devuelve la copia concatenada.
+        return copiaConcatenada; // Se liberan ambas memorias de los strings (para retener las propiedades)y se devuelve la copia concatenada.
 }
 
 // ========= EJERCICIO 2: FUNCIONES A IMPLEMENTAR (EL TP) =========
@@ -151,7 +151,9 @@ GameBoard* gameBoardNew() {
     board->current_piece.type = 0;
     board->current_piece.rotation = 0;
     board->score = 0;
-    board->tick_timer = 0; //Inicio los campos, con punteros y null y contadores en 0.
+    board->tick_timer = 0; //Inicio los campos, con punteros y null y contadores en 0. Se hace a mano porque malloc no inicializa la memoria.
+// si algun mallo falla, se libera lo ya creado.
+
 //voy a crear las filas del tablero, estan enlazadas, cada nueva fila va al principio de la lista.
     for(int i =0; i<GRID_ROWS; i++) {
         RowNode* nuevaFila = (RowNode*)malloc(sizeof(RowNode)); //creo la nueva fila.
@@ -197,7 +199,7 @@ void gameBoardDelete(GameBoard* board) {
         free(particulas);
         particulas = sig;
     }
-    free(board);//Libero memoria de todas las estructuras y del tablero.
+    free(board);//Libero memoria de todas las estructuras y del tablero. Se guarda 'sig' antes del free: despues de liberar un nodo ya no se puede leer su next. El mismo patron para las filas, la cola de piezas y las particulas.
 }
 
 void gameBoardAddParticle(GameBoard* board, float x, float y, int color) {
@@ -210,14 +212,14 @@ void gameBoardAddParticle(GameBoard* board, float x, float y, int color) {
     nuevaParticula->vel_x = (rand() % 100) / 100.0f * 6.0f - 3.0f; //Velocidades aleatorias entre -3 y 3
     nuevaParticula->vel_y = -(rand() % 100) / 100.0f*6.0f - 1.0f;
     nuevaParticula->color = color;
-    nuevaParticula->life_timer = 30;
+    nuevaParticula->life_timer = 30; //la particula debe durar unos frames. Tambien por eso se pide memoria con malloc.
     nuevaParticula->next = board->first_particle;
     board->first_particle = nuevaParticula;
 }
 
 int gameBoardCheckAndClearLines(GameBoard* board) {
     int lineasEliminadas =0;
-    int indice = 0;
+    int indice = 0; //cuenta la posicion en la lista original, sirve para ubicar las particulas.
     RowNode* prev =NULL;
     RowNode* curr = board->first_row;
 
@@ -298,7 +300,7 @@ int gameBoardDequeuePiece(GameBoard* board, int* out_type) {
     board->queue_head = nodoEliminado->next; //se guarda la cabeza de la cola en nodoEliminado con el tipo de pieeza y se actualiza la cabeza de la cola al siguiente nodo. 
 
     if (board->queue_head == NULL) {
-        board->queue_tail = NULL; //si despues de eliminar el nodo la lista queda vacia, la cola debe ser nula tambien.
+        board->queue_tail = NULL; //si despues de eliminar el nodo la lista queda vacia, la cola debe ser nula tambien. Sino se apunta a memoria liberada.
     }
     free(nodoEliminado);
     return 1; // se devuelve 1 cuando se elimina el nodo correctamente. Daba 0 si era vacia.
@@ -468,6 +470,8 @@ int inicializar() {
 }
 
 //TESTS 
+
+//Cada test del tablero crea y borra su propio tablero porque valgrind no va a ver fugas.
 void correrTests() {
     // strDuplicate 1. String vacio, 2. String de 1 caracter, 3. String con distintos caracteres
     char* dup1 = strDuplicate("");
